@@ -1,6 +1,3 @@
-# impacta_mlops
-Repositório para disciplina de "MLOps - Running ML in Production Environments"
-
 # Projeto MLOps – Previsão de Preço de Diamantes
 
 Este repositório faz parte da disciplina **MLOps – Running ML in Production Environments**.
@@ -37,6 +34,24 @@ O notebook deixou de ser responsável por toda a lógica de dados e passou a **c
 
 ---
 
+## O que foi feito na Aula 3
+
+Na Aula 3, o projeto evoluiu do preparo de dados para um **pipeline completo de modelagem**.
+
+Foram implementados:
+
+- separação da lógica de modelagem em módulos Python  
+- pipeline de pré-processamento e treino com scikit-learn  
+- script de treino executável via linha de comando  
+- avaliação padronizada de métricas de regressão  
+- experiment tracking completo com MLflow  
+- versionamento de modelos no MLflow Model Registry  
+- testes automatizados com pytest  
+
+A partir deste ponto, o modelo deixa de depender do notebook e passa a ser tratado
+como um **artefato versionado e rastreável**.
+
+
 ## Estrutura atual do projeto
 
 ```text
@@ -46,18 +61,29 @@ impacta_mlops/
 │   └── eda_diamonds.ipynb
 │
 ├── src/
-│   └── data.py
-│
-├── models/
+│   ├── data.py
+│   ├── model.py
+│   ├── __init__.py
+│   └── evaluate.py
 │
 ├── app/
 │
 ├── tests/
+│   ├── test_data.py
+│   ├── __init__.py
+│   ├── test_model.py
+│   └── test_train.py
+│
+├── models/
+│   └── diamond_price_model.joblib
 │
 ├── requirements.txt
+├── train.py
+├── pytest.ini
 ├── main.py
 ├── README.md
 └── .gitignore
+
 ```
 
 ---
@@ -112,60 +138,6 @@ pip install -r requirements.txt
 
 ---
 
-
-
-## O que foi feito na Aula 3
-
-Na Aula 3, o projeto evoluiu do preparo de dados para um **pipeline completo de modelagem**.
-
-Foram implementados:
-
-- separação da lógica de modelagem em módulos Python  
-- pipeline de pré-processamento e treino com scikit-learn  
-- script de treino executável via linha de comando  
-- avaliação padronizada de métricas de regressão  
-- experiment tracking completo com MLflow  
-- versionamento de modelos no MLflow Model Registry  
-- testes automatizados com pytest  
-
-A partir deste ponto, o modelo deixa de depender do notebook e passa a ser tratado
-como um **artefato versionado e rastreável**.
-
-
-
-## Estrutura atual do projeto
-
-```text
-impacta_mlops/
-│
-├── notebooks/
-│   └── eda_diamonds.ipynb
-│
-├── src/
-│   ├── data.py
-│   ├── model.py
-│   ├── __init__.py
-│   └── evaluate.py
-│
-├── tests/
-│   ├── test_data.py
-│   ├── test_model.py
-│   └── test_train.py
-│
-├── models/
-│   └── diamond_price_model.joblib
-│
-├── requirements.txt
-├── train.py
-├── pytest.ini
-├── main.py
-├── README.md
-└── .gitignore
-
-
-
----
-
 ### – Pipeline de treino
 
 
@@ -175,12 +147,14 @@ Execução padrão:
 
 ```bash
 python train.py
+```
 
 
 É possível ajustar hiperparâmetros via linha de comando:
 
 ```bash
 python train.py --max_depth 3
+```
 
 Durante o treino, são registrados no MLflow:
 parâmetros
@@ -198,6 +172,7 @@ Execução dos testes:
 
 ```bash
 pytest
+```
 
 Os testes cobrem:
 carregamento e split dos dados
@@ -230,11 +205,11 @@ Na **Aula 4**, o foco deixa de ser o treino do modelo e passa a ser **o uso do m
 Para manter o ambiente simples, estável e didático, foi adotada a seguinte arquitetura:
 
 - **MLflow rodando localmente (host)**  
-  - responsável por tracking, registry e histórico  
+- responsável por tracking, registry e histórico  
 
 - **Aplicação Streamlit rodando em Docker**  
-  - consome o modelo registrado no MLflow (cópia local) 
-  - executa inferência em tempo real  
+- consome o modelo registrado no MLflow (cópia local) 
+- executa inferência em tempo real  
 
 ---
 
@@ -288,15 +263,18 @@ http://localhost:8501
 ---
 ## Ciclo completo de MLOps
 Ao final da Aula 4, o projeto percorre todas as etapas do ciclo de MLOps:
-•	exploração e entendimento dos dados
-•	organização do projeto
-•	treino estruturado e versionado
-•	rastreabilidade de experimentos
-•	registro de modelos
-•	consumo do modelo em aplicação
-•	controle de ambiente e execução
+- exploração e entendimento dos dados
+- organização do projeto
+- treino estruturado e versionado
+- rastreabilidade de experimentos
+- registro de modelos
+- consumo do modelo em aplicação
+- controle de ambiente e execução
+
 O foco do curso não é apenas treinar modelos, mas entender como mantê-los vivos, confiáveis e utilizáveis.
+
 ---
+
 ## Encerramento
 Este projeto representa uma visão prática e realista de MLOps, mostrando que os principais desafios não estão apenas no modelo, mas em:
 - ambiente

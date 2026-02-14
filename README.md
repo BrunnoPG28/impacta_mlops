@@ -284,8 +284,3 @@ Este projeto representa uma visão prática e realista de MLOps, mostrando que o
 - operação
 
 ---
-
-# ToDo
-- mlflow no docker
-- rever interface gráfica
-- automatizar testes no github
